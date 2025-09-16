@@ -31,3 +31,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\seed.ps1
 
 ---
 作業を担当した自動化エージェントによる実行（ログ・結果はリポジトリにコミット済み）
+
+## D6 実行完了の記録
+
+完了日時: 2025-09-16T14:44:51+09:00
+
+コミット: 8c9e803 (HEAD)
+
+証跡ファイル:
+
+- `tools/seed_result.txt` — 検証結果（visit_daily=100, company=5, store=5, budget_monthly=5, budget_factors=5）
+- `app-core/target/logs/seed.log` — 実行ログ（開始/完了のタイムスタンプを含む）
+
+備考:
+
+- 初回実行時に重複/外部キ―制約でのエラーが発生した痕跡がログに残っていましたが、`scripts/seed.sql` を冪等化し `scripts/seed.ps1` を修正して最新ログはクリーンとなっています。
+- このドキュメントを D6 の完了証跡として扱ってください。
