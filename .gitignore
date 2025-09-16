@@ -8,3 +8,4 @@
 # IntelliJ / VSCode
 /.idea/
 .vscode/
+**/target/logs/
