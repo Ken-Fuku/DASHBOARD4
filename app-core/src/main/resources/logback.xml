@@ -1,0 +1,38 @@
+<configuration>
+  <property name="LOG_DIR" value="${LOG_DIR:-target/logs}"/>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/pragma_apply.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/pragma_apply.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Migration runner dedicated log file -->
+  <appender name="MIGRATION_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/migration_run.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_DIR}/migration_run.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>14</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="com.kenfukuda.dashboard.infrastructure.db.MigrationRunner" level="INFO" additivity="false">
+    <appender-ref ref="MIGRATION_FILE"/>
+  </logger>
+
+  <logger name="com.kenfukuda.dashboard.cli.MigrateMain" level="INFO" additivity="false">
+    <appender-ref ref="MIGRATION_FILE"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="FILE"/>
+  </root>
+</configuration>

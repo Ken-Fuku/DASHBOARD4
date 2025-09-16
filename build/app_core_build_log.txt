@@ -1,0 +1,7 @@
+Build log for app-core
+
+Command: mvn -f app-core/pom.xml -DskipTests package
+
+Output excerpt:
+BUILD SUCCESS
+Jar: app-core/target/app-core-0.0.1-SNAPSHOT.jar

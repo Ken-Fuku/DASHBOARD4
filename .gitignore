@@ -1,0 +1,10 @@
+# Ignore database files created during tests or local runs
+/data/*.db
+/data/*.db-journal
+
+# Maven target
+/app-core/target/
+
+# IntelliJ / VSCode
+/.idea/
+.vscode/
