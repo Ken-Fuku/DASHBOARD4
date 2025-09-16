@@ -11,8 +11,11 @@ $seedResult = Join-Path $root 'tools\seed_result.txt'
 if (-not (Test-Path $logsDir)) { New-Item -ItemType Directory -Path $logsDir | Out-Null }
 if (-not (Test-Path $dataDir)) { New-Item -ItemType Directory -Path $dataDir | Out-Null }
 
+# prepare clean seed log (overwrite existing)
+"Seed run started at $(Get-Date)" | Out-File -FilePath $seedLog -Encoding UTF8
+
 # Run migrations first (uses app-core/run_migrate.ps1)
-& "$appCore\run_migrate.ps1" 2>&1 | Tee-Object -FilePath $seedLog
+& "$appCore\run_migrate.ps1" 2>&1 | Tee-Object -FilePath $seedLog -Append
 
 # Execute static seed SQL
 # Requires sqlite3 available in PATH
