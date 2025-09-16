@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Sync API (M2 初版)
+  version: "0.1"
+  description: |-
+    シンプルな Push/Pull 用の API 断片（M2 初版）。
+servers:
+  - url: http://localhost:8080
+paths:
+  /sync/pull:
+    get:
+      summary: Export change_log since lsn
+      parameters:
+        - in: query
+          name: since_lsn
+          schema:
+            type: integer
+          required: true
+          description: "クライアントが持つ last_lsn。これより大きい変更を返す。"
+        - in: query
+          name: client_id
+          schema:
+            type: string
+          required: false
+          description: "要求元クライアント ID（オプション）。"
+      responses:
+        '200':
+          description: JSON Lines stream
+          content:
+            application/x-ndjson:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /sync/push:
+    post:
+      summary: Import change_log file (JSON Lines)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-ndjson:
+            schema:
+              type: string
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: import result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  applied:
+                    type: integer
+                  skipped:
+                    type: integer
+                  errors:
+                    type: array
+                    items:
+                      type: string
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Token
