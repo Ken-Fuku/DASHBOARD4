@@ -35,4 +35,15 @@ public class SyncStateRepository {
             ps.executeUpdate();
         }
     }
+
+    // upsert last_lsn using an existing Connection (does not close the connection)
+    public void upsertLastLsn(Connection conn, String clientId, long lastLsn) throws Exception {
+        String sql = "INSERT INTO sync_state(client_id, last_lsn, updated_at) VALUES(?, ?, datetime('now')) "
+                + "ON CONFLICT(client_id) DO UPDATE SET last_lsn = CASE WHEN excluded.last_lsn > sync_state.last_lsn THEN excluded.last_lsn ELSE sync_state.last_lsn END, updated_at = excluded.updated_at";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, clientId);
+            ps.setLong(2, lastLsn);
+            ps.executeUpdate();
+        }
+    }
 }

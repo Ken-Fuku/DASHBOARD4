@@ -6,6 +6,8 @@ import com.kenfukuda.dashboard.domain.model.ChangeLogEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import com.kenfukuda.dashboard.infrastructure.repository.SyncStateRepository;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -35,6 +37,24 @@ public class ImportChangeLogCommand {
                     while (rs.next()) existingTx.add(rs.getString(1));
                 }
             }
+            // read header meta if present
+            String header = r.readLine();
+            String clientId = null;
+            if (header != null && !header.trim().isEmpty()) {
+                JsonNode headerNode = mapper.readTree(header);
+                if (headerNode.has("__meta__")) {
+                    JsonNode meta = headerNode.get("__meta__");
+                    if (meta.has("client_id")) clientId = meta.get("client_id").asText();
+                    // if needed in future, meta.to_lsn is available here
+                } else {
+                    // not a meta header; treat it as first data line
+                    // we'll process it below by resetting the reader position: handle by processing 'header' as first line
+                    // push back by processing header variable as first data line
+                }
+            }
+
+            long maxAppliedLsn = -1L;
+
             while ((line = r.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 JsonNode node = mapper.readTree(line);
@@ -67,12 +87,32 @@ public class ImportChangeLogCommand {
                     conn.commit();
                     seenTx.put(txId, true);
                     existingTx.add(txId);
+                    if (lsn > maxAppliedLsn) maxAppliedLsn = lsn;
                 } catch (Exception ex) {
                     // rollback this tx only
                     try { if (conn != null) conn.rollback(sp); } catch (Exception rbe) {}
                     System.err.println("Failed to apply tx_id=" + txId + ": " + ex.getMessage());
                     // continue with next tx
                 }
+            }
+
+            // after processing, update sync_state.last_lsn in same DB
+            if (clientId != null && maxAppliedLsn > 0) {
+                SyncStateRepository ssr = new SyncStateRepository(new SqliteConnectionManager(dbPath));
+                try {
+                    // use the same connection to ensure atomic visibility
+                    ssr.upsertLastLsn(conn, clientId, maxAppliedLsn);
+                    // commit the upsert
+                    conn.commit();
+                    System.out.println("Updated sync_state for client_id=" + clientId + " to last_lsn=" + maxAppliedLsn);
+                } catch (Exception ex) {
+                    try { if (conn != null) conn.rollback(); } catch (Exception rbe) {}
+                    System.err.println("Failed to update sync_state for client_id=" + clientId + ": " + ex.getMessage());
+                }
+            } else if (clientId != null) {
+                System.out.println("No applied LSNs; skipping sync_state update for client_id=" + clientId);
+            } else {
+                System.out.println("No client_id present in import meta; sync_state not updated.");
             }
         }
         System.out.println("Import complete from " + inFile);
