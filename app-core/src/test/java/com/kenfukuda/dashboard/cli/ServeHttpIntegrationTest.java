@@ -14,12 +14,13 @@ public class ServeHttpIntegrationTest {
 
     @BeforeAll
     public static void startServer() throws Exception {
-        // prepare test DB
+        // prepare test DB (ensure fresh file so schema includes source_node)
         java.nio.file.Path p = java.nio.file.Path.of("data", "test_server.db");
         java.nio.file.Files.createDirectories(p.getParent());
+        try { java.nio.file.Files.deleteIfExists(p); } catch (Exception ignore) {}
         try (java.sql.Connection c = java.sql.DriverManager.getConnection("jdbc:sqlite:" + p.toAbsolutePath().toString())) {
             try (java.sql.Statement s = c.createStatement()) {
-                s.execute("CREATE TABLE IF NOT EXISTS change_log (lsn INTEGER PRIMARY KEY AUTOINCREMENT, tx_id TEXT, table_name TEXT, pk_json TEXT, op TEXT, payload TEXT, tombstone INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))");
+                s.execute("CREATE TABLE IF NOT EXISTS change_log (lsn INTEGER PRIMARY KEY AUTOINCREMENT, tx_id TEXT, table_name TEXT, pk_json TEXT, op TEXT, payload TEXT, tombstone INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), source_node TEXT)");
             }
         }
 

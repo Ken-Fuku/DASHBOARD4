@@ -1,0 +1,4 @@
+batch=50,took_ms=30085.87,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=100,took_ms=13279.82,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=500,took_ms=10164.29,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=1000,took_ms=4632.69,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db

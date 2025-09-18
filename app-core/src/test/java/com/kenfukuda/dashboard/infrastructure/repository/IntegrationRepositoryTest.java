@@ -26,7 +26,7 @@ public class IntegrationRepositoryTest {
         cm = new SqliteConnectionManager(p.toString());
         try (Connection c = cm.getConnection(); Statement s = c.createStatement()) {
             s.execute("PRAGMA foreign_keys=ON");
-            s.execute("CREATE TABLE change_log (lsn INTEGER PRIMARY KEY AUTOINCREMENT, tx_id TEXT, table_name TEXT, pk_json TEXT, op TEXT, payload TEXT, tombstone INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')))");
+                s.execute("CREATE TABLE change_log (lsn INTEGER PRIMARY KEY AUTOINCREMENT, tx_id TEXT, table_name TEXT, pk_json TEXT, op TEXT, payload TEXT, tombstone INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now')), source_node TEXT)");
             s.execute("CREATE TABLE sync_state (client_id TEXT PRIMARY KEY, last_lsn INTEGER, updated_at TEXT DEFAULT (datetime('now')))");
         }
         clogRepo = new ChangeLogRepository(cm);

@@ -1,0 +1,75 @@
+openapi: 3.0.0
+info:
+  title: M3 Allocations API
+  version: 0.1.0
+  description: API for daily allocations derived from monthly amounts (按分エンジン + 日次API)
+paths:
+  /api/v1/allocations/daily:
+    get:
+      summary: Get daily allocations for a month
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 2025
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 9
+        - name: companyAmount
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            example: 300.0
+        - name: stores
+          in: query
+          required: false
+          description: |-
+            Stores CSV in format id:amount|id2:amount2 e.g. A:600|B:300
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  year:
+                    type: integer
+                  month:
+                    type: integer
+                  daily:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date
+                        companyAmount:
+                          type: number
+                          format: double
+                        stores:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              storeId:
+                                type: string
+                              amount:
+                                type: number
+                                format: double
+                  totalMonthly:
+                    type: number
+        '400':
+          description: Invalid parameters
+        '500':
+          description: Server error

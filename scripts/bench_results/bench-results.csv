@@ -1,0 +1,4 @@
+batch=50,took_ms=3167.42,outfile=..\data\bench-changelog.jsonl,db=..\data\bench.db
+batch=100,took_ms=2978.16,outfile=..\data\bench-changelog.jsonl,db=..\data\bench.db
+batch=500,took_ms=2865.02,outfile=..\data\bench-changelog.jsonl,db=..\data\bench.db
+batch=1000,took_ms=2892.34,outfile=..\data\bench-changelog.jsonl,db=..\data\bench.db

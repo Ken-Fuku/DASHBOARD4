@@ -41,3 +41,9 @@
 ## トリガ & ChangeLog
 - 実テーブルの I/U/D トリガで change_log にエントリを記録する（payload を JSON にする）
 - トリガ内の処理は軽量化（大きな処理は外部バッチで）
+
+## 実装差分（M1 実施時の注意）
+- PRAGMA の適用は `SqlitePragmaConfigurer` を通じて行う。`MigrationRunner` 起動時や接続確立後に適用することで WAL や foreign_keys の設定が確実に有効になる。
+- CI/統合テスト環境では外部 `sqlite3` CLI に依存しないよう、シード処理は JDBC（`sqlite-jdbc`）で実行する実装を推奨する。PowerShell スクリプト `scripts/seed.ps1` はローカル手順用であり、Windows 環境で `sqlite3` が PATH にあることが前提となる。
+- トリガが JSON 関連関数（`json_object` 等）を使う場合、SQLite のビルドによっては関数の有無に差があるため、CI 環境上での確認が重要（今回の M1 では sqlite-jdbc を使ったテストで検証済み）。
+

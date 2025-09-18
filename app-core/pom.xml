@@ -39,11 +39,30 @@
       <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
+    <!-- Test utilities -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
+      <scope>test</scope>
+    </dependency>
     <!-- JSON (de)serialization for export/import commands -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.15.2</version>
+    </dependency>
+    <!-- Spring Web for REST controller annotations -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>6.0.15</version>
     </dependency>
     <!-- picocli for CLI subcommands -->
     <dependency>

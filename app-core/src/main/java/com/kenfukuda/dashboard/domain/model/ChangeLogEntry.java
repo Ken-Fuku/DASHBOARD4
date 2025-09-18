@@ -9,10 +9,11 @@ public class ChangeLogEntry {
     private String payload;
     private int tombstone;
     private String createdAt;
+    private String sourceNode;
 
     public ChangeLogEntry() {}
 
-    public ChangeLogEntry(long lsn, String txId, String tableName, String pkJson, String op, String payload, int tombstone, String createdAt) {
+    public ChangeLogEntry(long lsn, String txId, String tableName, String pkJson, String op, String payload, int tombstone, String createdAt, String sourceNode) {
         this.lsn = lsn;
         this.txId = txId;
         this.tableName = tableName;
@@ -21,6 +22,12 @@ public class ChangeLogEntry {
         this.payload = payload;
         this.tombstone = tombstone;
         this.createdAt = createdAt;
+        this.sourceNode = sourceNode;
+    }
+
+    // backward-compatible constructor (sourceNode defaults to null)
+    public ChangeLogEntry(long lsn, String txId, String tableName, String pkJson, String op, String payload, int tombstone, String createdAt) {
+        this(lsn, txId, tableName, pkJson, op, payload, tombstone, createdAt, null);
     }
 
     public long getLsn() { return lsn; }
@@ -31,6 +38,7 @@ public class ChangeLogEntry {
     public String getPayload() { return payload; }
     public int getTombstone() { return tombstone; }
     public String getCreatedAt() { return createdAt; }
+    public String getSourceNode() { return sourceNode; }
 
     public void setLsn(long lsn) { this.lsn = lsn; }
     public void setTxId(String txId) { this.txId = txId; }
@@ -40,6 +48,7 @@ public class ChangeLogEntry {
     public void setPayload(String payload) { this.payload = payload; }
     public void setTombstone(int tombstone) { this.tombstone = tombstone; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setSourceNode(String sourceNode) { this.sourceNode = sourceNode; }
 
     @Override
     public String toString() {
@@ -52,6 +61,7 @@ public class ChangeLogEntry {
                 ", payload='" + (payload != null ? (payload.length() > 200 ? payload.substring(0,200) + "..." : payload) : null) + '\'' +
                 ", tombstone=" + tombstone +
                 ", createdAt='" + createdAt + '\'' +
+                ", sourceNode='" + sourceNode + '\'' +
                 '}';
     }
 }

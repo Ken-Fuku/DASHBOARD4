@@ -5,6 +5,27 @@
 ## 層構造（高レベル）
 - domain: エンティティ・値オブジェクト・ドメインサービス（ビジネスルール）
 - application: ユースケース（UseCase/Service）、DTO、入力検証、トランザクション境界
+- infrastructure: DB 接続・リポジトリ実装・マイグレーション・外部連携
+- interface: CLI（初期）→ 将来 UI(JavaFX)
+
+## Java パッケージ命名（例）
+- com.kenfukuda.dashboard.domain...
+- com.kenfukuda.dashboard.application...
+- com.kenfukuda.dashboard.infrastructure...
+- com.kenfukuda.dashboard.cli...
+
+## ディレクトリ構成（抜粋）
+- /app-core/src/main/java/...
+- /db/migrations/*.sql (順序付き、冪等)
+- /docs/*.md (設計・運用ドキュメント)
+- /scripts/*.ps1 / *.sh (起動・マイグレーション・シード)
+# ARCHITECTURE AND FOLDER (原案)
+
+目的: 層構造と命名規約を明確化し、将来の拡張（モジュール分割 / UI追加）を容易にする。
+
+## 層構造（高レベル）
+- domain: エンティティ・値オブジェクト・ドメインサービス（ビジネスルール）
+- application: ユースケース（UseCase/Service）、DTO、入力検証、トランザクション境界
 - infrastructure: DB 接続・リポジトリ実装・マイグレーション・外部連携（ファイル/HTTP）
 - interface: CLI（初期）・後に ui-javafx を設置。CLI は application を呼ぶ薄い層とする。
 

@@ -12,11 +12,12 @@ paths:
       summary: Export change_log since lsn
       parameters:
         - in: query
-          name: since_lsn
+          name: from_lsn
           schema:
             type: integer
-          required: true
-          description: "クライアントが持つ last_lsn。これより大きい変更を返す。"
+            default: 0
+          required: false
+          description: "クライアントが持つ last_lsn。これより大きい変更を返す。省略時は 0 として全件返す。"
         - in: query
           name: client_id
           schema:
@@ -30,43 +31,32 @@ paths:
             application/x-ndjson:
               schema:
                 type: string
+              example: "__meta__ {\"tx_grouping\":true}\n{...}\n{...}\n"
             application/json:
               schema:
                 type: string
   /sync/push:
     post:
       summary: Import change_log file (JSON Lines)
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/x-ndjson:
             schema:
               type: string
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+            description: "NDJSON 形式の changelog をそのままリクエストボディに送信します。サーバ側で一時ファイルに保存してインポートします。"
       responses:
         '200':
           description: import result
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  applied:
-                    type: integer
-                  skipped:
-                    type: integer
-                  errors:
-                    type: array
-                    items:
-                      type: string
+                type: string
+                example: "ok"
+          text/plain:
+            schema:
+              type: string
+              example: "ok"
 components:
   securitySchemes:
     bearerAuth:

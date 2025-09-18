@@ -29,6 +29,12 @@ public class ServeCommand implements Runnable {
     @Option(names = {"--db"}, description = "Path to SQLite DB file")
     private String dbPath = "data/app.db";
 
+    @Option(names = {"--node-id"}, description = "Node identifier used as source_node in exports")
+    private String nodeId = "local";
+
+    @Option(names = {"--main-node-id"}, description = "Identifier of the main node to consider for conflict resolution")
+    private String mainNodeId = null;
+
     public void run() {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -86,9 +92,9 @@ public class ServeCommand implements Runnable {
                     String[] parts = query.split("from_lsn=");
                     try { fromLsn = Long.parseLong(parts[1].split("&")[0]); } catch (Exception e) { }
                 }
-                // call export to temp file
+                // call export to temp file (include server node id as source_node)
                 File tmp = Files.createTempFile("export", ".jsonl").toFile();
-                ExportChangeLogCommand.run(dbPath, fromLsn, tmp.getAbsolutePath());
+                ExportChangeLogCommand.run(dbPath, fromLsn, tmp.getAbsolutePath(), nodeId);
                 byte[] body = Files.readAllBytes(tmp.toPath());
                 exchange.getResponseHeaders().add("Content-Type", "application/x-ndjson; charset=utf-8");
                 exchange.sendResponseHeaders(200, body.length);
@@ -123,7 +129,8 @@ public class ServeCommand implements Runnable {
                     byte[] buf = new byte[8192]; int r;
                     while ((r = is.read(buf)) != -1) fos.write(buf, 0, r);
                 }
-                ImportChangeLogCommand.run(dbPath, tmp.getAbsolutePath());
+                // pass mainNodeId to import so it can detect if incoming changes are from main
+                ImportChangeLogCommand.runWithMainNodeId(dbPath, tmp.getAbsolutePath(), mainNodeId);
                 String resp = "ok";
                 byte[] out = resp.getBytes(StandardCharsets.UTF_8);
                 exchange.getResponseHeaders().add("Content-Type", "application/json; charset=utf-8");
