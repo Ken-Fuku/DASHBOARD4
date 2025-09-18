@@ -23,11 +23,29 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Build and run tests
+      - name: Build and run tests (no secrets)
+        run: |
+          cd app-core
+          mvn -DskipTests=false test
+
+  e2e-with-secrets:
+    name: E2E (with secrets)
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.use_secrets == 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build and run tests (with secrets)
         env:
-          # Only inject secrets into env when the manual input `use_secrets` is 'true'
-          UPLOAD_ENDPOINT: ${{ github.event.inputs.use_secrets == 'true' && secrets.UPLOAD_ENDPOINT || '' }}
-          AUTH_TOKEN: ${{ github.event.inputs.use_secrets == 'true' && secrets.AUTH_TOKEN || '' }}
+          UPLOAD_ENDPOINT: ${{ secrets.UPLOAD_ENDPOINT }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         run: |
           cd app-core
           mvn -DskipTests=false test
