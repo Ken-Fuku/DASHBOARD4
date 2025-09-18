@@ -27,7 +27,8 @@ public class SyncStateRepository {
 
     // upsert last_lsn for client
     public void upsertLastLsn(String clientId, long lastLsn) throws Exception {
-        String sql = "INSERT INTO sync_state(client_id, last_lsn, updated_at) VALUES(?, ?, datetime('now')) ON CONFLICT(client_id) DO UPDATE SET last_lsn = excluded.last_lsn, updated_at = excluded.updated_at";
+        String sql = "INSERT INTO sync_state(client_id, last_lsn, updated_at) VALUES(?, ?, datetime('now')) "
+                + "ON CONFLICT(client_id) DO UPDATE SET last_lsn = CASE WHEN excluded.last_lsn > sync_state.last_lsn THEN excluded.last_lsn ELSE sync_state.last_lsn END, updated_at = excluded.updated_at";
         try (Connection c = cm.getConnection();
              PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setString(1, clientId);

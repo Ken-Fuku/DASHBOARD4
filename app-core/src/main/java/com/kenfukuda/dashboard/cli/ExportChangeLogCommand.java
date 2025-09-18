@@ -37,6 +37,11 @@ public class ExportChangeLogCommand implements Runnable {
     }
 
     public static void run(String dbPath, long fromLsn, String outFile) throws Exception {
+        run(dbPath, fromLsn, outFile, "local");
+    }
+
+    // overload to allow specifying source node for exported meta and entries
+    public static void run(String dbPath, long fromLsn, String outFile, String sourceNode) throws Exception {
         SqliteConnectionManager cm = new SqliteConnectionManager(dbPath);
         ChangeLogRepository repo = new ChangeLogRepository(cm);
         long max = repo.getMaxLsn();
@@ -50,7 +55,7 @@ public class ExportChangeLogCommand implements Runnable {
             // write meta
             ObjectNode meta = mapper.createObjectNode();
             meta.put("file_version", "1.0");
-            meta.put("source_node", "local");
+            meta.put("source_node", sourceNode != null ? sourceNode : "local");
             meta.put("exported_at", java.time.Instant.now().toString());
             meta.put("from_lsn", fromLsn);
             meta.put("to_lsn", max);
@@ -70,7 +75,7 @@ public class ExportChangeLogCommand implements Runnable {
                 if (e.getPayload() != null) obj.set("payload", mapper.readTree(e.getPayload())); else obj.putNull("payload");
                 obj.put("tombstone", e.getTombstone());
                 obj.put("created_at", e.getCreatedAt());
-                obj.put("source_node", "local");
+                obj.put("source_node", sourceNode != null ? sourceNode : "local");
                 w.write(mapper.writeValueAsString(obj));
                 w.newLine();
             }

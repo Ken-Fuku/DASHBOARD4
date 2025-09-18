@@ -1,0 +1,16 @@
+batch=50,took_ms=24.83,outfile=data/bench-changelog.jsonl,db=data/bench.db
+batch=100,took_ms=15,outfile=data/bench-changelog.jsonl,db=data/bench.db
+batch=500,took_ms=10.01,outfile=data/bench-changelog.jsonl,db=data/bench.db
+batch=1000,took_ms=10.88,outfile=data/bench-changelog.jsonl,db=data/bench.db
+batch=50,took_ms=3090.31,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=100,took_ms=3443.35,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=500,took_ms=3565.03,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=1000,took_ms=3594.81,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=50,took_ms=109.35,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=100,took_ms=24.94,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=500,took_ms=19,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=1000,took_ms=16.8,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=50,took_ms=15231.77,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=100,took_ms=4357.92,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=500,took_ms=4427.94,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=1000,took_ms=4505.09,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
