@@ -25,4 +25,22 @@ public class AllocationServiceTest {
         assertEquals(100.0, Math.round(s29 * 100) / 100.0);
         assertEquals(100.0, Math.round(s31 * 100) / 100.0);
     }
+
+    @Test
+    public void testPriorityAllocationAndAbnormal() {
+        AllocationService svc = new AllocationService();
+        List<AllocationService.StoreMonthly> stores = List.of(new AllocationService.StoreMonthly("A", 600.0), new AllocationService.StoreMonthly("B", 300.0));
+        List<AllocationService.DailyComposite> comp = svc.allocateCompanyThenStores(300.0, stores, 2025, 9, "last-day");
+        // company 300 + stores 900 -> total 1200 -> per day (Sep 2025 = 30 days) approx 40.00
+        double dailySum0 = Math.round((comp.get(0).companyAmount + comp.get(0).stores.stream().mapToDouble(s->s.amount).sum())*100)/100.0;
+        assertEquals(40.0, dailySum0);
+
+        // abnormal: negative amount -> expect IllegalArgumentException
+        try {
+            svc.distributeMonthlyToDaily(-1.0, 2025, 9, "last-day");
+            throw new AssertionError("expected exception for negative amount");
+        } catch (IllegalArgumentException ex) {
+            // expected
+        }
+    }
 }

@@ -28,6 +28,9 @@ public class AllocationService {
     }
 
     public List<DailyEntry> distributeMonthlyToDaily(double monthAmount, int year, int month, String roundingStrategy) {
+        if (monthAmount < 0) throw new IllegalArgumentException("monthAmount must be >= 0");
+        if (month < 1 || month > 12) throw new IllegalArgumentException("month must be 1..12");
+        if (year < 1) throw new IllegalArgumentException("year must be >= 1");
         int days = daysInMonth(year, month);
         long total = toCents(monthAmount);
         long base = total / days;
