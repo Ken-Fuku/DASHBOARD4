@@ -235,14 +235,14 @@ cd scripts\bench
 （注）同一ファイルへ複数回の実行ログが追記されているため、下記はファイル末尾に記録された最新の 4 行を抜粋しています。
 
 ```
-batch=50,took_ms=15231.77,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
-batch=100,took_ms=4357.92,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
-batch=500,took_ms=4427.94,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
-batch=1000,took_ms=4505.09,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=50,took_ms=30085.87,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=100,took_ms=13279.82,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=500,took_ms=10164.29,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
+batch=1000,took_ms=4632.69,outfile=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench-changelog.jsonl,db=C:\Users\ken.fukuda\MyProgram\DASHBOARD4\data\bench.db
 ```
 
 簡単な所見:
-- batch=50 の実測が 15 秒超と大きく出ています。これは最初のマイグレーションや DB 初期化（WAL/journal 設定、インデックス作成等）が重く出た影響と考えられます。
-- batch >=100 はおおむね 4.3〜4.5 秒台で安定しており、import の実行時間はバッチサイズによる劇的な差は見られませんでした（ただしローカル環境・I/O に依存します）。
+- batch=50 の実測が約 30.1 秒と大きく出ています。これは初回実行でのマイグレーションや DB 初期化（WAL/journal 設定、インデックス作成等）が影響した可能性が高いです。
+- batch=100 は約 13.3 秒、batch=500 は約 10.2 秒、batch=1000 は約 4.6 秒でした。バッチサイズが大きくなるほど import の効率が改善していますが、I/O と初期オーバーヘッドの影響があります。
 
-推奨: 再現性の高いベンチを得るために、ベンチ前に DB マイグレーションを事前に実行し、暖機運転を 1 回入れてから計測することを推奨します。
+推奨: 再現性の高いベンチを得るために、ベンチ前に DB マイグレーションを事前に実行し、暖機運転（ウォームアップ）を 1 回入れてから計測することを推奨します。
