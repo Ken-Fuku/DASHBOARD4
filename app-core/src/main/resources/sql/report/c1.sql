@@ -15,9 +15,9 @@ JOIN store s ON s.id = v.store_id
 JOIN company c ON c.id = s.company_id
 LEFT JOIN (
   -- 仮想的な日次予算テーブル（BudgetMonthly を日割りするロジックを実装すること）
-  SELECT bm.store_id, bm.yyyymm, (bm.monthly_budget / 30) AS daily_budget
+  SELECT bm.store_id, bm.year_month, (bm.budget_amount / 30) AS daily_budget
   FROM budget_monthly bm
-) b ON b.store_id = v.store_id AND b.yyyymm = strftime('%Y-%m', v.visit_date)
+) b ON b.store_id = v.store_id AND b.year_month = strftime('%Y-%m', v.visit_date)
 WHERE (:company_id IS NULL OR c.id = :company_id)
   AND (:store_id IS NULL OR s.id = :store_id)
   AND v.visit_date BETWEEN :yyyymm_start AND :yyyymm_end

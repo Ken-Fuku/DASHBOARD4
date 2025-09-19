@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kenfukuda.dashboard.ui.controller.C1Controller">
+    <top>
+        <HBox spacing="8">
+            <Label text="CompanyId:" />
+            <TextField fx:id="companyIdField" promptText="company id" />
+            <Label text="StoreId:" />
+            <TextField fx:id="storeIdField" promptText="store id" />
+            <Label text="YearMonth(YYYY-MM):" />
+            <TextField fx:id="yyyymmField" promptText="2025-09" />
+            <Button text="Fetch" fx:id="fetchBtn" />
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="table">
+            <columns>
+                <TableColumn fx:id="colDate" text="Date" />
+                <TableColumn fx:id="colStore" text="Store" />
+                <TableColumn fx:id="colVisitors" text="Visitors" />
+                <TableColumn fx:id="colBudget" text="Budget" />
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox spacing="8">
+            <Button text="Prev" fx:id="prevBtn" />
+            <Button text="Next" fx:id="nextBtn" />
+            <Label fx:id="cursorLabel" text="" />
+            <!-- show resolved DB path for debugging -->
+            <Label text="DB:" />
+            <Label fx:id="dbPathLabel" text="" />
+        </HBox>
+    </bottom>
+</BorderPane>

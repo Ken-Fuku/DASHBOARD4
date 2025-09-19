@@ -16,6 +16,21 @@ public class MainApp extends Application {
         primaryStage.setTitle("DASHBOARD4 - UI (JavaFX)");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        // Add simple keyboard shortcut to open C1 view (Ctrl+1)
+        scene.getAccelerators().put(new javafx.scene.input.KeyCodeCombination(javafx.scene.input.KeyCode.DIGIT1, javafx.scene.input.KeyCombination.CONTROL_DOWN), () -> {
+            try {
+                FXMLLoader fx = new FXMLLoader(getClass().getResource("/fxml/c1.fxml"));
+                Parent p = fx.load();
+                Stage s = new Stage();
+                s.setTitle("C1 Report");
+                s.setScene(new Scene(p, 900, 600));
+                s.initOwner(primaryStage);
+                s.show();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public static void main(String[] args) {
