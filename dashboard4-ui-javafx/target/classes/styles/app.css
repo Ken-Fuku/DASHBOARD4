@@ -1,0 +1,8 @@
+/* Minimal styles for the JavaFX sample app */
+label {
+    -fx-font-size: 14px;
+}
+
+button {
+    -fx-padding: 8 16 8 16;
+}
